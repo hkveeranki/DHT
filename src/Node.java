@@ -4,12 +4,10 @@
  */
 
 import java.rmi.*;
-
-import java.rmi.server.UnicastRemoteObject;
 ;
 import java.lang.*;
 
-public class Node extends UnicastRemoteObject implements Nodedef {
+public class Node implements Nodedef {
     public int num;
     public String[] hm;
 

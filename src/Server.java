@@ -4,28 +4,39 @@
  * Created for DHT.
  */
 
+
 import java.net.*;
 import java.util.*;
 import java.rmi.registry.*;
 import java.io.*;
 import java.rmi.*;
+import java.rmi.server.*;
+
 
 public class Server {
 
+    /* Provides Ip address of Machine */
+
     public static String get_my_ip() throws Exception {
-        Enumeration e = NetworkInterface.getNetworkInterfaces();
-        while (e.hasMoreElements()) {
-            NetworkInterface n = (NetworkInterface) e.nextElement();
-            Enumeration ee = n.getInetAddresses();
-            while (ee.hasMoreElements()) {
-                InetAddress i = (InetAddress) ee.nextElement();
-                if (i instanceof Inet4Address && !(i.isLoopbackAddress())) {
-                    return i.getHostAddress();
+        try {
+            Enumeration e = NetworkInterface.getNetworkInterfaces();
+            while (e.hasMoreElements()) {
+                NetworkInterface n = (NetworkInterface) e.nextElement();
+                Enumeration ee = n.getInetAddresses();
+                while (ee.hasMoreElements()) {
+                    InetAddress i = (InetAddress) ee.nextElement();
+                    if (i instanceof Inet4Address && !(i.isLoopbackAddress())) {
+                        return i.getHostAddress();
+                    }
                 }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return null;
     }
+
+    /* Initialises Registries by getting remote registries */
 
     public static int fill_registry(Registry[] reg) throws Exception {
         int myindex = 0;
@@ -49,13 +60,12 @@ public class Server {
         return myindex;
     }
 
+    /* Main code which runs the code */
+
     public static void main(String[] args) throws Exception {
 
         Scanner input = new Scanner(System.in);
         PrintStream op = System.out;
-
-        Nodedef node = new Node(8);
-        Registry myreg;
 
         if (System.getSecurityManager() == null) {
             System.setSecurityManager(new RMISecurityManager());
@@ -65,6 +75,13 @@ public class Server {
 
         int num = 0, myport = 1099, myindex = 0, filled = 0;
         String myip = get_my_ip();
+
+        /* Setting this property so that remote machines can connect */
+        System.setProperty("java.rmi.server.hostname", myip);
+
+        /* Getting the total number of machines and port number to create a registry */
+
+        Node node = new Node(8);
 
         try (BufferedReader br = new BufferedReader(new FileReader("config.txt"))) {
             String line;
@@ -84,8 +101,8 @@ public class Server {
         }
 
         try {
-            myreg = LocateRegistry.createRegistry(myport);
-            myreg.bind("node", node);
+            Nodedef stub = (Nodedef) UnicastRemoteObject.exportObject(node, 0);
+            Naming.rebind("node", stub);
             op.println("Created Registry");
             op.println();
         } catch (Exception e) {
@@ -94,8 +111,10 @@ public class Server {
         }
 
         Registry[] reg = new Registry[num];
+
         // Take Input and perform Actions
         for (; ; ) {
+
             if (filled == 0)
                 op.println("1 - Initialise");
             op.println("2 - Insert a Word into DHT");
@@ -105,6 +124,8 @@ public class Server {
             op.print("Choice : ");
 
             String line = input.nextLine();
+
+
             if (filled == 0 && !line.equals("1") && !line.equals("4")) {
                 op.println("Initialise First");
                 continue;
@@ -126,6 +147,7 @@ public class Server {
                 try {
                     if (fir != myindex) {
                         Nodedef stub = (Nodedef) reg[fir].lookup("node");
+                        System.out.println("Got the Stub Attempting call now");
                         stub.put(key, val);
                     } else
                         node.put(key, val);
@@ -149,6 +171,7 @@ public class Server {
             } else {
                 op.println("Wrong Option");
             }
+            op.println();
         }
     }
 }
