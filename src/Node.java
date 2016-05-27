@@ -4,29 +4,27 @@
  */
 
 import java.rmi.*;
-;
+
 import java.lang.*;
+import java.util.*;
 
 public class Node implements Nodedef {
-    public int num;
-    public String[] hm;
+    public HashMap<String,String> hm;
 
-    public Node(int num) throws RemoteException {
+    public Node() throws RemoteException {
         super();
-        this.num = num;
-        this.hm = new String[num];
+        this.hm = new HashMap();
     }
 
-    public String get(int id) throws Exception {
-        if (id < this.num && this.hm[id] != null) {
-            return this.hm[id];
+    public String get(String id) throws Exception {
+        if (this.hm.get(id) != null) {
+            return this.hm.get(id);
         } else {
             return "No Such Key Exists";
         }
     }
 
-    public void put(int key, String val) throws Exception {
-        this.hm[key] = val;
+    public void put(String key, String val) throws Exception {
+        this.hm.put(key,val);
     }
-
 }

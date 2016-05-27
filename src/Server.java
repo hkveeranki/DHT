@@ -17,7 +17,7 @@ public class Server {
 
     /* Provides Ip address of Machine */
 
-    public static String get_my_ip() throws Exception {
+    private static String get_my_ip() throws Exception {
         try {
             Enumeration e = NetworkInterface.getNetworkInterfaces();
             while (e.hasMoreElements()) {
@@ -38,7 +38,7 @@ public class Server {
 
     /* Initialises Registries by getting remote registries */
 
-    public static int fill_registry(Registry[] reg) throws Exception {
+    private static int fill_registry(Registry[] reg) throws Exception {
         int myindex = 0;
         String myip = get_my_ip();
         try (BufferedReader br = new BufferedReader(new FileReader("config.txt"))) {
@@ -73,7 +73,7 @@ public class Server {
 
         // Filling port myindex and create a registry
 
-        int num = 0, myport = 1099, myindex = 0, filled = 0;
+        int num = 0, myindex = 0, filled = 0;
         String myip = get_my_ip();
 
         /* Setting this property so that remote machines can connect */
@@ -81,7 +81,7 @@ public class Server {
 
         /* Getting the total number of machines and port number to create a registry */
 
-        Node node = new Node(8);
+        Node node = new Node();
 
         try (BufferedReader br = new BufferedReader(new FileReader("config.txt"))) {
             String line;
@@ -91,7 +91,6 @@ public class Server {
                 int index = Integer.parseInt(toks[0]);
                 int port = Integer.parseInt(toks[2]);
                 if (toks[1].equals(myip)) {
-                    myport = port;
                     myindex = index;
                 }
                 num = index + 1;
@@ -135,36 +134,38 @@ public class Server {
                 op.println("Initialised successfully");
                 filled = 1;
             } else if (line.equals("2")) {
+                String val,key1;
                 int key;
-                String val;
                 op.print("Enter key: ");
                 key = Integer.parseInt(input.nextLine());
                 op.print("Enter String: ");
                 val = input.nextLine();
                 int fir = key % num;
                 key /= num;
-
+                key1 = Integer.toString(key);
                 try {
                     if (fir != myindex) {
                         Nodedef stub = (Nodedef) reg[fir].lookup("node");
                         System.out.println("Got the Stub Attempting call now");
-                        stub.put(key, val);
+                        stub.put(key1, val);
                     } else
-                        node.put(key, val);
+                        node.put(key1, val);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             } else if (line.equals("3")) {
                 int key;
+                String key1;
                 op.print("Enter key: ");
                 key = Integer.parseInt(input.nextLine());
                 int fir = key % num;
                 key /= num;
+                key1 = Integer.toString(key);
                 if (fir != myindex) {
                     Nodedef stub = (Nodedef) reg[fir].lookup("node");
-                    op.println(stub.get(key));
+                    op.println(stub.get(key1));
                 } else {
-                    op.println(node.get(key));
+                    op.println(node.get(key1));
                 }
             } else if (line.equals("4")) {
                 System.exit(0);

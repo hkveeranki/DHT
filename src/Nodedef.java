@@ -6,6 +6,6 @@
 import java.rmi.*;
 
 public interface Nodedef extends Remote {
-    String get(int id) throws Exception;
-    void put(int key, String val) throws Exception;
+    String get(String id) throws Exception;
+    void put(String key, String val) throws Exception;
 }
