@@ -102,7 +102,7 @@ public class Server {
         try {
             Nodedef stub = (Nodedef) UnicastRemoteObject.exportObject(node, 0);
             Naming.rebind("node", stub);
-            op.println();
+            //op.println();
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(0);
@@ -113,16 +113,16 @@ public class Server {
         // Take Input and perform Actions
         for (; ; ) {
 
-            if (filled == 0)
+            /*if (filled == 0)
                 op.println("1 - Initialise");
             op.println("2 - Insert a Word into DHT");
             op.println("3 - Look up for a Word in DHT");
             op.println("4 - Exit");
             op.println();
             op.print("Choice : ");
-
+*/
             String line = input.nextLine();
-            op.println();
+           // op.println();
 
             if (filled == 0 && !line.equals("1") && !line.equals("4")) {
                 op.println("Initialise First");
@@ -135,9 +135,9 @@ public class Server {
             } else if (line.equals("2")) {
                 String val,key1;
                 int key;
-                op.print("Enter key: ");
+                //op.print("Enter key: ");
                 key = Integer.parseInt(input.nextLine());
-                op.print("Enter String: ");
+                //op.print("Enter String: ");
                 val = input.nextLine();
                 int fir = key % num;
                 key /= num;
@@ -154,7 +154,7 @@ public class Server {
             } else if (line.equals("3")) {
                 int key;
                 String key1;
-                op.print("Enter key: ");
+                //op.print("Enter key: ");
                 key = Integer.parseInt(input.nextLine());
                 int fir = key % num;
                 key /= num;
@@ -176,7 +176,7 @@ public class Server {
                 op.println("Wrong Option");
             }
 
-            op.println();
+ //           op.println();
 
         }
     }
