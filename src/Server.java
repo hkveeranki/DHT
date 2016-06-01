@@ -102,7 +102,6 @@ public class Server {
         try {
             Nodedef stub = (Nodedef) UnicastRemoteObject.exportObject(node, 0);
             Naming.rebind("node", stub);
-            op.println("Created Registry");
             op.println();
         } catch (Exception e) {
             e.printStackTrace();
@@ -123,7 +122,7 @@ public class Server {
             op.print("Choice : ");
 
             String line = input.nextLine();
-
+            op.println();
 
             if (filled == 0 && !line.equals("1") && !line.equals("4")) {
                 op.println("Initialise First");
@@ -146,7 +145,6 @@ public class Server {
                 try {
                     if (fir != myindex) {
                         Nodedef stub = (Nodedef) reg[fir].lookup("node");
-                        System.out.println("Got the Stub Attempting call now");
                         stub.put(key1, val);
                     } else
                         node.put(key1, val);
@@ -161,18 +159,25 @@ public class Server {
                 int fir = key % num;
                 key /= num;
                 key1 = Integer.toString(key);
+                double startTime = System.nanoTime();
                 if (fir != myindex) {
                     Nodedef stub = (Nodedef) reg[fir].lookup("node");
                     op.println(stub.get(key1));
                 } else {
                     op.println(node.get(key1));
                 }
+
+                double endTime = System.nanoTime();
+                System.out.println("Took "+(endTime - startTime)/1000 + " microsec");
             } else if (line.equals("4")) {
+                op.println("Exitting Now. Bye");
                 System.exit(0);
             } else {
                 op.println("Wrong Option");
             }
+
             op.println();
+
         }
     }
 }
