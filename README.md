@@ -1,6 +1,6 @@
 # DHT
 ## Compile
-run compile.sh
+run the Makefile
 ## Execute
 run runserver.sh
 
