@@ -109,7 +109,8 @@ public class Server {
         }
 
         Registry[] reg = new Registry[num];
-
+        int sic=0,ric=0,ssc=0,rsc=0,sdc=0,rdc=0;
+        double sit=0,rit=0,sst=0,rst=0,sdt=0,rdt=0;
         // Take Input and perform Actions
         for (; ; ) {
 
@@ -145,15 +146,18 @@ public class Server {
                 double startTime = System.nanoTime();
                 try {
                     if (fir != myindex) {
-
+                        ric+=1;
                         Nodedef stub = (Nodedef) reg[fir].lookup("node");
                         stub.put(key1, val);
                         double endTime = System.nanoTime();
                         System.out.println("Insert on Remote Took "+(endTime - startTime)/1000 + " microsec");
+                        rit+=((endTime - startTime)/1000);
                     } else {
+                        sic+=1;
                         node.put(key1, val);
                         double endTime = System.nanoTime();
                         System.out.println("Insert on Self Took "+(endTime - startTime)/1000 + " microsec");
+                        sit+=((endTime - startTime)/1000);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -168,15 +172,18 @@ public class Server {
                 key1 = Integer.toString(key);
                 double startTime = System.nanoTime();
                 if (fir != myindex) {
-
+                    rsc+=1
                     Nodedef stub = (Nodedef) reg[fir].lookup("node");
                     op.println(stub.get(key1));
                     double endTime = System.nanoTime();
                     System.out.println("Search on Remote Took "+(endTime - startTime)/1000 + " microsec");
+                    rst+=((endTime - startTime)/1000);
                 } else {
+                    ssc+=1;
                     op.println(node.get(key1));
                     double endTime = System.nanoTime();
                     System.out.println("Search on Self Took "+(endTime - startTime)/1000 + " microsec");
+                    sst+=((endTime - startTime)/1000);
                 }
 
             } else if (line.equals("4")) {
@@ -189,18 +196,30 @@ public class Server {
                 key1 = Integer.toString(key);
                 double startTime = System.nanoTime();
                 if (fir != myindex) {
-
+                    rdc+=1;
                     Nodedef stub = (Nodedef) reg[fir].lookup("node");
                     stub.delete(key1);
                     double endTime = System.nanoTime();
                     System.out.println("Delete on Remote Took "+(endTime - startTime)/1000 + " microsec");
+                    rdt+=((endTime - startTime)/1000);
                 } else {
+                    sdc+=1;
                     node.delete(key1);
                     double endTime = System.nanoTime();
                     System.out.println("Delete on Self Took "+(endTime - startTime)/1000 + " microsec");
+                    sdt+=((endTime - startTime)/1000);
                 }
             } else if (line.equals("5")) {
                 op.println("Exitting Now. Bye");
+                op.println("Final Results are");
+
+                op.println("Average Insert time on Self - "+(sit/sic));
+                op.println("Average Insert time on Remote - "+(rit/ric));
+                op.println("Average Search time  on Self - "+(sst/ssc));
+                op.println("Average Search time on Remote - "+(rst/rsc));
+                op.println("Average Delete time on Self - "+(sdt/sdc));
+                op.println("Average Delete time on Remote - "+(rdt/rdc));
+
                 System.exit(0);
             } else {
                 op.println("Wrong Option");
