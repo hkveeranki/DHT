@@ -175,9 +175,9 @@ public class Server {
                 if (fir != myindex) {
                     rsc+=1;
                     double startTime = System.nanoTime();
-
-                    op.println(reg[fir].get(key1));
+                    String s = reg[fir].get(key1);
                     double endTime = System.nanoTime();
+                    op.println(s);
                     System.out.println("Search on Remote Took "+(endTime - startTime)/1000 + " microsec");
                     rst+=((endTime - startTime)/1000);
                 } else {
