@@ -159,16 +159,18 @@ public class Server {
                 int fir = key % num;
                 key /= num;
                 key1 = Integer.toString(key);
-                double startTime = System.nanoTime();
+
                 if (fir != myindex) {
+                    double startTime = System.nanoTime();
                     Nodedef stub = (Nodedef) reg[fir].lookup("node");
                     op.println(stub.get(key1));
+                    double endTime = System.nanoTime();
+                    System.out.println("Took "+(endTime - startTime)/1000 + " microsec");
                 } else {
                     op.println(node.get(key1));
                 }
 
-                double endTime = System.nanoTime();
-                System.out.println("Took "+(endTime - startTime)/1000 + " microsec");
+
             } else if (line.equals("4")) {
                 op.println("Exitting Now. Bye");
                 System.exit(0);
