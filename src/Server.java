@@ -110,7 +110,7 @@ public class Server {
 
         Registry[] reg = new Registry[num];
         int sic=0,ric=0,ssc=0,rsc=0,sdc=0,rdc=0;
-        double sit=0,rit=0,sst=0,rst=0,sdt=0,rdt=0;
+        float sit=0,rit=0,sst=0,rst=0,sdt=0,rdt=0;
         // Take Input and perform Actions
         for (; ; ) {
 
@@ -217,21 +217,19 @@ public class Server {
             } else if (line.equals("5")) {
 
                 op.println("Final Results are");
-                op.println("Average Insert time on Self - "+(sit/sic)+"for "+sic+"insertions");
-                op.println("Average Insert time on Remote - "+(rit/ric)+"for "+ric+"insertions");
-                op.println("Average Search time  on Self - "+(sst/ssc)+"for "+ssc+"searches");
-                op.println("Average Search time on Remote - "+(rst/rsc)+"for "+rsc+"searches");
-                op.println("Average Delete time on Self - "+(sdt/sdc)+"for "+sdc+"deletions");
-                op.println("Average Delete time on Remote - "+(rdt/rdc)+"for "+rdc+"deletions");
+                op.println("Average Insert time on Self - "+(sit/sic)+"for "+sic+" insertions");
+                op.println("Average Insert time on Remote - "+(rit/ric)+"for "+ric+" insertions");
+                op.println("Average Search time  on Self - "+(sst/ssc)+"for "+ssc+" searches");
+                op.println("Average Search time on Remote - "+(rst/rsc)+"for "+rsc+" searches");
+                op.println("Average Delete time on Self - "+(sdt/sdc)+"for "+sdc+" deletions");
+                op.println("Average Delete time on Remote - "+(rdt/rdc)+"for "+rdc+" deletions");
 
                 op.println("Exitting Now. Bye");
                 System.exit(0);
             } else {
                 op.println("Wrong Option");
             }
-
  //           op.println();
-
         }
     }
 }
