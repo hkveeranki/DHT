@@ -25,9 +25,13 @@ for i in range(1,n+1):
     print i
     print ''.join(random.choice(string.letters) for _ in range(N))
 
-# Generating Tests 
+# Generating Search Tests 
 for i in range(t):
     print 3
     print random.randint(1,n)
+# Generatig Delete Tests
+for i in range(t):
+    print 4
+    print random.randint(1,n)
 # Exitting
-print 4
+print 5
