@@ -38,7 +38,7 @@ public class Server {
 
     /* Initialises Registries by getting remote registries */
 
-    private static int fill_registry(Registry[] reg) throws Exception {
+    private static int fill_registry(Nodedef[] reg) throws Exception {
         int myindex = 0;
         String myip = get_my_ip();
         try (BufferedReader br = new BufferedReader(new FileReader("config.txt"))) {
@@ -48,10 +48,11 @@ public class Server {
                 int index = Integer.parseInt(toks[0]);
                 int port = Integer.parseInt(toks[2]);
                 if (toks[1].equals(myip)) {
-                    reg[index] = LocateRegistry.getRegistry(port);
+                    Registry temp = LocateRegistry.getRegistry(port);
                     myindex = index;
                 } else {
-                    reg[index] = LocateRegistry.getRegistry(toks[1], port);
+                    Registry temp = LocateRegistry.getRegistry(toks[1], port);
+                    reg[index] = (Nodedef)temp.lookup("node");
                 }
             }
         } catch (Exception e) {
@@ -108,7 +109,7 @@ public class Server {
             System.exit(0);
         }
 
-        Registry[] reg = new Registry[num];
+        Nodedef[] reg = new Nodedef[num];
         int sic=0,ric=0,ssc=0,rsc=0,sdc=0,rdc=0;
         float sit=0,rit=0,sst=0,rst=0,sdt=0,rdt=0;
         // Take Input and perform Actions
@@ -147,8 +148,7 @@ public class Server {
                     if (fir != myindex) {
                         ric+=1;
                         double startTime = System.nanoTime();
-                        Nodedef stub = (Nodedef) reg[fir].lookup("node");
-                        stub.put(key1, val);
+                        reg[fir].put(key1, val);
                         double endTime = System.nanoTime();
                         System.out.println("Insert on Remote Took "+(endTime - startTime)/1000 + " microsec");
                         rit+=((endTime - startTime)/1000);
@@ -175,8 +175,8 @@ public class Server {
                 if (fir != myindex) {
                     rsc+=1;
                     double startTime = System.nanoTime();
-                    Nodedef stub = (Nodedef) reg[fir].lookup("node");
-                    op.println(stub.get(key1));
+
+                    op.println(reg[fir].get(key1));
                     double endTime = System.nanoTime();
                     System.out.println("Search on Remote Took "+(endTime - startTime)/1000 + " microsec");
                     rst+=((endTime - startTime)/1000);
@@ -201,8 +201,7 @@ public class Server {
                 if (fir != myindex) {
                     rdc+=1;
                     double startTime = System.nanoTime();
-                    Nodedef stub = (Nodedef) reg[fir].lookup("node");
-                    stub.delete(key1);
+                    reg[fir].delete(key1);
                     double endTime = System.nanoTime();
                     System.out.println("Delete on Remote Took "+(endTime - startTime)/1000 + " microsec");
                     rdt+=((endTime - startTime)/1000);
