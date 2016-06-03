@@ -8,4 +8,5 @@ import java.rmi.*;
 public interface Nodedef extends Remote {
     String get(String id) throws Exception;
     void put(String key, String val) throws Exception;
+    void delete(String key) throws Exception;
 }

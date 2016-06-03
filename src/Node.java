@@ -9,6 +9,7 @@ import java.lang.*;
 import java.util.*;
 
 public class Node implements Nodedef {
+
     public HashMap<String,String> hm;
 
     public Node() throws RemoteException {
@@ -26,4 +27,10 @@ public class Node implements Nodedef {
     public void put(String key, String val) throws Exception {
         this.hm.put(key,val);
     }
+    public void delete(String key) throws Exception{
+        if (this.hm.get(key) != null) {
+            this.hm.remove(key);
+        }
+    }
+
 }

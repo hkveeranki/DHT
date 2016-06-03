@@ -142,12 +142,19 @@ public class Server {
                 int fir = key % num;
                 key /= num;
                 key1 = Integer.toString(key);
+                double startTime = System.nanoTime();
                 try {
                     if (fir != myindex) {
+
                         Nodedef stub = (Nodedef) reg[fir].lookup("node");
                         stub.put(key1, val);
-                    } else
+                        double endTime = System.nanoTime();
+                        System.out.println("Insert on Remote Took "+(endTime - startTime)/1000 + " microsec");
+                    } else {
                         node.put(key1, val);
+                        double endTime = System.nanoTime();
+                        System.out.println("Insert on Self Took "+(endTime - startTime)/1000 + " microsec");
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -159,19 +166,40 @@ public class Server {
                 int fir = key % num;
                 key /= num;
                 key1 = Integer.toString(key);
-
+                double startTime = System.nanoTime();
                 if (fir != myindex) {
-                    double startTime = System.nanoTime();
+
                     Nodedef stub = (Nodedef) reg[fir].lookup("node");
                     op.println(stub.get(key1));
                     double endTime = System.nanoTime();
-                    System.out.println("Took "+(endTime - startTime)/1000 + " microsec");
+                    System.out.println("Search on Remote Took "+(endTime - startTime)/1000 + " microsec");
                 } else {
                     op.println(node.get(key1));
+                    double endTime = System.nanoTime();
+                    System.out.println("Search on Self Took "+(endTime - startTime)/1000 + " microsec");
                 }
 
-
             } else if (line.equals("4")) {
+                int key;
+                String key1;
+                //op.print("Enter key: ");
+                key = Integer.parseInt(input.nextLine());
+                int fir = key % num;
+                key /= num;
+                key1 = Integer.toString(key);
+                double startTime = System.nanoTime();
+                if (fir != myindex) {
+
+                    Nodedef stub = (Nodedef) reg[fir].lookup("node");
+                    stub.delete(key1);
+                    double endTime = System.nanoTime();
+                    System.out.println("Delete on Remote Took "+(endTime - startTime)/1000 + " microsec");
+                } else {
+                    node.delete(key1);
+                    double endTime = System.nanoTime();
+                    System.out.println("Delete on Self Took "+(endTime - startTime)/1000 + " microsec");
+                }
+            } else if (line.equals("5")) {
                 op.println("Exitting Now. Bye");
                 System.exit(0);
             } else {
