@@ -172,7 +172,7 @@ public class Server {
                 key1 = Integer.toString(key);
                 double startTime = System.nanoTime();
                 if (fir != myindex) {
-                    rsc+=1
+                    rsc+=1;
                     Nodedef stub = (Nodedef) reg[fir].lookup("node");
                     op.println(stub.get(key1));
                     double endTime = System.nanoTime();
@@ -210,9 +210,8 @@ public class Server {
                     sdt+=((endTime - startTime)/1000);
                 }
             } else if (line.equals("5")) {
-                op.println("Exitting Now. Bye");
-                op.println("Final Results are");
 
+                op.println("Final Results are");
                 op.println("Average Insert time on Self - "+(sit/sic));
                 op.println("Average Insert time on Remote - "+(rit/ric));
                 op.println("Average Search time  on Self - "+(sst/ssc));
@@ -220,6 +219,7 @@ public class Server {
                 op.println("Average Delete time on Self - "+(sdt/sdc));
                 op.println("Average Delete time on Remote - "+(rdt/rdc));
 
+                op.println("Exitting Now. Bye");
                 System.exit(0);
             } else {
                 op.println("Wrong Option");
