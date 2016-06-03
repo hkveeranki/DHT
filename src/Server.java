@@ -143,10 +143,10 @@ public class Server {
                 int fir = key % num;
                 key /= num;
                 key1 = Integer.toString(key);
-                double startTime = System.nanoTime();
                 try {
                     if (fir != myindex) {
                         ric+=1;
+                        double startTime = System.nanoTime();
                         Nodedef stub = (Nodedef) reg[fir].lookup("node");
                         stub.put(key1, val);
                         double endTime = System.nanoTime();
@@ -154,6 +154,7 @@ public class Server {
                         rit+=((endTime - startTime)/1000);
                     } else {
                         sic+=1;
+                        double startTime = System.nanoTime();
                         node.put(key1, val);
                         double endTime = System.nanoTime();
                         System.out.println("Insert on Self Took "+(endTime - startTime)/1000 + " microsec");
@@ -170,9 +171,10 @@ public class Server {
                 int fir = key % num;
                 key /= num;
                 key1 = Integer.toString(key);
-                double startTime = System.nanoTime();
+
                 if (fir != myindex) {
                     rsc+=1;
+                    double startTime = System.nanoTime();
                     Nodedef stub = (Nodedef) reg[fir].lookup("node");
                     op.println(stub.get(key1));
                     double endTime = System.nanoTime();
@@ -180,6 +182,7 @@ public class Server {
                     rst+=((endTime - startTime)/1000);
                 } else {
                     ssc+=1;
+                    double startTime = System.nanoTime();
                     op.println(node.get(key1));
                     double endTime = System.nanoTime();
                     System.out.println("Search on Self Took "+(endTime - startTime)/1000 + " microsec");
@@ -194,9 +197,10 @@ public class Server {
                 int fir = key % num;
                 key /= num;
                 key1 = Integer.toString(key);
-                double startTime = System.nanoTime();
+
                 if (fir != myindex) {
                     rdc+=1;
+                    double startTime = System.nanoTime();
                     Nodedef stub = (Nodedef) reg[fir].lookup("node");
                     stub.delete(key1);
                     double endTime = System.nanoTime();
@@ -204,6 +208,7 @@ public class Server {
                     rdt+=((endTime - startTime)/1000);
                 } else {
                     sdc+=1;
+                    double startTime = System.nanoTime();
                     node.delete(key1);
                     double endTime = System.nanoTime();
                     System.out.println("Delete on Self Took "+(endTime - startTime)/1000 + " microsec");
@@ -212,12 +217,12 @@ public class Server {
             } else if (line.equals("5")) {
 
                 op.println("Final Results are");
-                op.println("Average Insert time on Self - "+(sit/sic));
-                op.println("Average Insert time on Remote - "+(rit/ric));
-                op.println("Average Search time  on Self - "+(sst/ssc));
-                op.println("Average Search time on Remote - "+(rst/rsc));
-                op.println("Average Delete time on Self - "+(sdt/sdc));
-                op.println("Average Delete time on Remote - "+(rdt/rdc));
+                op.println("Average Insert time on Self - "+(sit/sic)+"for "+sic+"insertions");
+                op.println("Average Insert time on Remote - "+(rit/ric)+"for "+ric+"insertions");
+                op.println("Average Search time  on Self - "+(sst/ssc)+"for "+ssc+"searches");
+                op.println("Average Search time on Remote - "+(rst/rsc)+"for "+rsc+"searches");
+                op.println("Average Delete time on Self - "+(sdt/sdc)+"for "+sdc+"deletions");
+                op.println("Average Delete time on Remote - "+(rdt/rdc)+"for "+rdc+"deletions");
 
                 op.println("Exitting Now. Bye");
                 System.exit(0);
